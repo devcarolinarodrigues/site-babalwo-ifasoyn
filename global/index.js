@@ -1,13 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initCarousel() {
   const track = document.getElementById('carouselTrack');
   const prevBtn = document.querySelector('.carousel-prev');
   const nextBtn = document.querySelector('.carousel-next');
   const dotsWrap = document.getElementById('carouselDots');
   if (!track) return;
 
+  dotsWrap.innerHTML = '';
   const cards = Array.from(track.children);
 
-  // Build dots
   cards.forEach((_, i) => {
     const dot = document.createElement('span');
     dot.className = 'dot' + (i === 0 ? ' active' : '');
@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     track.scrollBy({ left: cardWidth(), behavior: 'smooth' });
   });
 
-  // Update active dot on scroll
   let scrollTimeout;
   track.addEventListener('scroll', () => {
     clearTimeout(scrollTimeout);
@@ -42,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 80);
   });
 
-  // Auto-scroll loop (gentle, pauses on hover/interaction)
   let autoTimer;
   function startAuto() {
     autoTimer = setInterval(() => {
@@ -60,18 +58,22 @@ document.addEventListener('DOMContentLoaded', () => {
   track.addEventListener('mouseenter', stopAuto);
   track.addEventListener('mouseleave', startAuto);
   track.addEventListener('touchstart', stopAuto, { passive: true });
-});
+}
 
-// Importa os 5 primeiros produtos de produtos.html
-fetch('produtos.html')
-  .then(r => r.text())
-  .then(html => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const cards = Array.from(doc.querySelectorAll('#productsGrid .product-card')).slice(0, 5);
-    const track = document.getElementById('carouselTrack');
-    if (!track) return;
-    cards.forEach(card => track.appendChild(card));
-    // reinicia o carrossel após inserir os cards
-    document.dispatchEvent(new Event('DOMContentLoaded'));
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('produtos.html')
+    .then(r => r.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const cards = Array.from(doc.querySelectorAll('#productsGrid .product-card')).slice(0, 5);
+      const track = document.getElementById('carouselTrack');
+      if (!track) return;
+      cards.forEach(card => track.appendChild(card));
+      initCarousel();
+    })
+    .catch(() => {
+      // Se o fetch falhar (ex: rodando local sem servidor), inicializa com o que já tiver no HTML
+      initCarousel();
+    });
+});
