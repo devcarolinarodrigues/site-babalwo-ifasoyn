@@ -630,7 +630,6 @@ p { color: var(--text-soft); }
     width: fit-content;
   }
 
-  .product-card { flex: 0 0 78%; }
   .social-grid { grid-template-columns: 1fr; max-width: 280px; margin: 0 auto 50px; }
   .carousel-btn { width: 40px; height: 40px; }
 }
@@ -663,5 +662,52 @@ p { color: var(--text-soft); }
 @media (max-width: 600px) {
   .insta-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Esconde as setas no mobile — o usuário arrasta com o dedo */
+  .carousel-btn {
+    display: none;
+  }
+
+  .carousel {
+    gap: 0;
+  }
+
+  .carousel-track {
+    padding: 6px 4px 16px;
+  }
+
+  .product-card {
+    flex: 0 0 72%;
+    max-width: 280px;
+  }
+
+  .product-img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .product-body {
+    padding: 16px 16px 20px;
+  }
+
+  .product-body h3 {
+    font-size: 1rem;
+  }
+
+  .product-body p {
+    font-size: 0.88rem;
+    line-height: 1.4;
+    /* limita a descrição a 3 linhas pra não esticar o card */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .btn-secondary {
+    padding: 12px 20px;
+    font-size: 0.88rem;
   }
 }
